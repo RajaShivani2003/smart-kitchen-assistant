@@ -72,7 +72,7 @@ function MatchRecipesContent() {
   }, [authLoading, user]);
 
   const matchUrl = `/api/recipes/match?mealType=${mealType}&dietary=${dietary}&external=${includeExternal}`;
-  const { data: recipesData, loading: fetchLoading } = useCachedFetch<MatchedRecipe[]>(matchUrl, { enabled: !!user && !authLoading });
+  const { data: recipesData, loading: fetchLoading } = useCachedFetch<MatchedRecipe[]>(matchUrl);
 
   const getMatchColor = (percentage: number) => {
     if (percentage >= 80) return 'text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400';

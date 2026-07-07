@@ -39,7 +39,7 @@ function SavedRecipesContent() {
   const [selectedRecipe, setSelectedRecipe] = useState<SavedRecipe | null>(null);
   const [removeLoading, setRemoveLoading] = useState<string | null>(null);
 
-  const { data: recipesData, loading: recipesLoading, refresh: refreshRecipes } = useCachedFetch<SavedRecipe[]>('/api/saved-recipes', { enabled: !!user });
+  const { data: recipesData, loading: recipesLoading, refresh: refreshRecipes } = useCachedFetch<SavedRecipe[]>('/api/saved-recipes');
 
   useEffect(() => {
     if (recipesData) setSavedRecipes(recipesData);

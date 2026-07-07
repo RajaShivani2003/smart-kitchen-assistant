@@ -149,7 +149,7 @@ function RecipesContent() {
     if (!user && !authLoading) router.push('/login');
   }, [authLoading, user, router]);
 
-  const { data: recipesData, loading: recipesLoading, refresh: refreshRecipes } = useCachedFetch('/api/recipes', { enabled: !!user });
+  const { data: recipesData, loading: recipesLoading, refresh: refreshRecipes } = useCachedFetch('/api/recipes');
 
   useEffect(() => {
     if (recipesData) {

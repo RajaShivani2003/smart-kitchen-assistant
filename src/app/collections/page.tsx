@@ -44,7 +44,7 @@ function CollectionsContent() {
   const [formData, setFormData] = useState({ name: '', description: '' });
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: collectionsData, loading: collectionsLoading, refresh: refreshCollections } = useCachedFetch<Collection[]>('/api/collections', { enabled: !!user });
+  const { data: collectionsData, loading: collectionsLoading, refresh: refreshCollections } = useCachedFetch<Collection[]>('/api/collections');
 
   useEffect(() => {
     if (collectionsData) setCollections(collectionsData);

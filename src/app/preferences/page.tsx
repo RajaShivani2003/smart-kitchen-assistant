@@ -43,7 +43,7 @@ function PreferencesContent() {
   const [dietaryPreferences, setDietaryPreferences] = useState<string[]>([]);
   const [healthGoals, setHealthGoals] = useState<string>('');
 
-  const { data: userData, loading: userLoading, refresh: refreshUser } = useCachedFetch<{ user: any; session?: { user: any } }>('/api/user', { enabled: !!user });
+  const { data: userData, loading: userLoading, refresh: refreshUser } = useCachedFetch<{ user: any; session?: { user: any } }>('/api/user');
 
   useEffect(() => {
     if (userData) {

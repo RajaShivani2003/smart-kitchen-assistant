@@ -65,7 +65,7 @@ function PantryContent() {
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [lowStockItems, setLowStockItems] = useState<Ingredient[]>([]);
 
-  const { data: pantryData, loading: pantryLoading, refresh: refreshPantry } = useCachedFetch('/api/pantry', { enabled: !!user });
+  const { data: pantryData, loading: pantryLoading, refresh: refreshPantry } = useCachedFetch('/api/pantry');
 
   useEffect(() => {
     if (pantryData?.ingredients) {

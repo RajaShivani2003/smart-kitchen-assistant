@@ -43,7 +43,7 @@ function MealPlanContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [availableRecipes, setAvailableRecipes] = useState<MealPlanRecipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<MealPlanRecipe | null>(null);
-  const { data: recipesData, loading: recipesLoading } = useCachedFetch<MealPlanRecipe[]>('/api/recipes', { enabled: !!user });
+  const { data: recipesData, loading: recipesLoading } = useCachedFetch<MealPlanRecipe[]>('/api/recipes');
 
   useEffect(() => {
     if (recipesData) {

@@ -55,7 +55,7 @@ function ChatContent() {
   const recognitionRef = useRef<any>(null);
   const initialLoadDone = useRef(false);
 
-  const { data: chatData, loading: chatLoading, refresh: refreshChat } = useCachedFetch<{ messages: any[] }>('/api/chat/history', { enabled: !!user });
+  const { data: chatData, loading: chatLoading, refresh: refreshChat } = useCachedFetch<{ messages: any[] }>('/api/chat/history');
 
   useEffect(() => {
     if (!user && !authLoading) {

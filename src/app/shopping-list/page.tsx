@@ -46,8 +46,8 @@ function ShoppingListContent() {
     { name: 'Instamart', color: '#4ADE80', icon: '💚', url: (item: string) => `https://www.swiggy.com/instamart/search?q=${encodeURIComponent(item)}` },
   ];
 
-  const { data: shoppingData, loading: shoppingLoading, refresh: refreshShopping } = useCachedFetch<ShoppingItem[]>('/api/shopping-list', { enabled: !!user });
-  const { data: pantryData, loading: pantryLoading, refresh: refreshPantry } = useCachedFetch<{ ingredients: PantryItem[] } | PantryItem[]>('/api/pantry', { enabled: !!user });
+  const { data: shoppingData, loading: shoppingLoading, refresh: refreshShopping } = useCachedFetch<ShoppingItem[]>('/api/shopping-list');
+  const { data: pantryData, loading: pantryLoading, refresh: refreshPantry } = useCachedFetch<{ ingredients: PantryItem[] } | PantryItem[]>('/api/pantry');
 
   useEffect(() => {
     if (shoppingData) setItems(shoppingData);
