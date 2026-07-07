@@ -30,7 +30,12 @@ export function useCachedFetch<T = any>(url: string, options?: { ttl?: number; e
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { credentials: 'include' });
+      if (!res.ok) {
+        setError(new Error(`HTTP ${res.status}`));
+        setLoading(false);
+        return;
+      }
       const json = await res.json();
       cache.set(url, { data: json, timestamp: Date.now() });
       setData(json);
