@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { comparePassword } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 import { randomBytes } from 'crypto';
@@ -7,10 +8,10 @@ export async function POST(req: Request) {
     const { email, password } = await req.json();
 
     if (!email || !password) {
-      return new Response(JSON.stringify({ error: 'Email and password are required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return NextResponse.json(
+        { error: 'Email and password are required' },
+        { status: 400 }
+      );
     }
 
     const user = await prisma.user.findUnique({
@@ -18,19 +19,19 @@ export async function POST(req: Request) {
     });
 
     if (!user || !user.password) {
-      return new Response(JSON.stringify({ error: 'Invalid email or password' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
     }
 
     const isValid = await comparePassword(password, user.password);
 
     if (!isValid) {
-      return new Response(JSON.stringify({ error: 'Invalid email or password' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
     }
 
     const token = randomBytes(32).toString('hex');
@@ -43,20 +44,21 @@ export async function POST(req: Request) {
       },
     });
 
-    const cookieValue = `session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}; Secure`;
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Set-Cookie': cookieValue,
-      },
+    const response = NextResponse.json({ success: true });
+    response.cookies.set('session', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
     });
+    return response;
   } catch (error) {
     console.error('Login error:', error);
     const msg = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(JSON.stringify({ error: 'Something went wrong: ' + msg }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json(
+      { error: 'Something went wrong: ' + msg },
+      { status: 500 }
+    );
   }
 }
