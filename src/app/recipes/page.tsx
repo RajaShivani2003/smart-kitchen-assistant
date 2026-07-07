@@ -308,7 +308,6 @@ function RecipesContent() {
   if (authLoading) {
     return <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div></div>;
   }
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
