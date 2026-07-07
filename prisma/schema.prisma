@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  emailVerified     DateTime?
+  password          String
+  image             String?
+  role              Role      @default(USER)
+  dietaryPreferences String @default("")
+  healthGoals       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  accounts          Account[]
+  sessions          Session[]
+  savedRecipes      SavedRecipe[]
+  mealPlans         MealPlan[]
+  shoppingLists     ShoppingList[]
+  collections       Collection[]
+  reviews           Review[]
+  ingredients       Ingredient[]
+  userRecipes       UserRecipe[]
+  chatMessages      ChatMessage[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Account {
+  id                String   @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(uuid())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Ingredient {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  quantity    Float
+  unit        String
+  category    String
+  expiryDate  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("ingredients")
+}
+
+model Recipe {
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  cuisine         String
+  mealType        String
+  cookingTime     Int
+  servings        Int
+  difficulty      String
+  nutritionalInfo String
+  image           String?
+  youtubeUrl      String?
+  source          String   @default("catalog")
+  externalId      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  recipeIngredients RecipeIngredient[]
+  recipeSteps       RecipeStep[]
+  savedRecipes      SavedRecipe[]
+  mealPlans         MealPlan[]
+  reviews           Review[]
+
+  @@index([mealType])
+  @@index([cuisine])
+  @@index([source])
+  @@unique([externalId])
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id         String   @id @default(uuid())
+  recipeId   String
+  ingredient String
+  quantity   String
+  unit       String?
+
+  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@map("recipe_ingredients")
+}
+
+model RecipeStep {
+  id           String   @id @default(uuid())
+  recipeId     String
+  stepNumber   Int
+  instruction  String
+  estimatedTime Int?
+
+  recipe       Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@map("recipe_steps")
+}
+
+model SavedRecipe {
+  id         String   @id @default(uuid())
+  userId     String
+  recipeId   String
+  collectionId String?
+  savedAt    DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  collection Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, recipeId])
+  @@index([userId])
+  @@map("saved_recipes")
+}
+
+model MealPlan {
+  id         String   @id @default(uuid())
+  userId     String
+  date       DateTime
+  mealType   String
+  recipeId   String
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("meal_plans")
+}
+
+model ShoppingList {
+  id          String   @id @default(uuid())
+  userId      String
+  item        String
+  quantity    String?
+  unit        String?
+  isPurchased Boolean  @default(false)
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("shopping_lists")
+}
+
+model Collection {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  savedRecipes SavedRecipe[]
+
+  @@index([userId])
+  @@map("collections")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe  Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@map("reviews")
+}
+
+model UserRecipe {
+  id              String   @id @default(uuid())
+  userId          String
+  title           String
+  description     String
+  cuisine         String   @default("Other")
+  mealType        String
+  cookingTime     Int
+  servings        Int
+  difficulty      String   @default("Medium")
+  nutritionalInfo String
+  image           String?
+  youtubeUrl      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipeIngredients UserRecipeIngredient[]
+  recipeSteps     UserRecipeStep[]
+
+  @@index([userId])
+  @@map("user_recipes")
+}
+
+model UserRecipeIngredient {
+  id           String   @id @default(uuid())
+  userRecipeId String
+  ingredient   String
+  quantity     String
+  unit         String?
+
+  userRecipe   UserRecipe @relation(fields: [userRecipeId], references: [id], onDelete: Cascade)
+
+  @@index([userRecipeId])
+  @@map("user_recipe_ingredients")
+}
+
+model UserRecipeStep {
+  id            String   @id @default(uuid())
+  userRecipeId  String
+  stepNumber    Int
+  instruction   String
+  estimatedTime Int?
+
+  userRecipe    UserRecipe @relation(fields: [userRecipeId], references: [id], onDelete: Cascade)
+
+  @@index([userRecipeId])
+  @@map("user_recipe_steps")
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  role      String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("chat_messages")
+}
