@@ -403,9 +403,6 @@ function PantryContent() {
       </div>
     );
   }
-  if (!user) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
