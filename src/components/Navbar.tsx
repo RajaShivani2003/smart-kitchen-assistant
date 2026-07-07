@@ -47,55 +47,7 @@ export default function Navbar() {
     router.push('/login');
   };
 
-  if (!user && !loading) {
-    return (
-      <>
-        <nav className="hidden md:flex items-center justify-between px-8 py-4 bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700 shadow-sm">
-          <div className="flex items-center gap-2">
-            <ChefHat className="w-6 h-6 text-orange-500" />
-            <Link href="/dashboard" className="text-xl font-bold text-zinc-900 dark:text-white">
-              Smart Kitchen
-            </Link>
-          </div>
-          <div className="flex items-center gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-                >
-                  <Icon className="w-4 h-4" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/login')}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
-            >
-              Login
-            </button>
-          </div>
-        </nav>
-        <nav className="md:hidden flex items-center justify-between px-4 py-3 bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700">
-          <div className="flex items-center gap-2">
-            <ChefHat className="w-6 h-6 text-orange-500" />
-            <span className="text-lg font-bold text-zinc-900 dark:text-white">Smart Kitchen</span>
-          </div>
-          <button
-            onClick={() => router.push('/login')}
-            className="px-4 py-2 text-sm font-medium text-orange-600"
-          >
-            Login
-          </button>
-        </nav>
-      </>
-    );
-  }
+  const isUserLoggedIn = !!user;
 
   return (
     <>
@@ -129,16 +81,27 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-sm text-zinc-600 dark:text-zinc-400">
-            {user.name}
-          </span>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
+          {isUserLoggedIn ? (
+            <>
+              <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                {user.name}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => router.push('/login')}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
+            >
+              Login
+            </button>
+          )}
         </div>
       </nav>
 
@@ -160,9 +123,11 @@ export default function Navbar() {
 
       {mobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700 px-4 py-2 space-y-1">
-          <span className="block px-3 py-2 text-sm text-zinc-600 dark:text-zinc-400">
-            {user.name}
-          </span>
+          {isUserLoggedIn && (
+            <span className="block px-3 py-2 text-sm text-zinc-600 dark:text-zinc-400">
+              {user.name}
+            </span>
+          )}
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -181,16 +146,28 @@ export default function Navbar() {
               </Link>
             );
           })}
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              handleLogout();
-            }}
-            className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
+          {isUserLoggedIn ? (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                router.push('/login');
+              }}
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
+            >
+              Login
+            </button>
+          )}
         </div>
       )}
     </>
