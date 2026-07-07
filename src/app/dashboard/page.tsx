@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getServerAuth } from '@/lib/server-auth';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const auth = await getServerAuth();
 
