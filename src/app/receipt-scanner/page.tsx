@@ -263,6 +263,7 @@ function ReceiptScannerContent() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(item),
+          credentials: 'include',
         });
       }
 

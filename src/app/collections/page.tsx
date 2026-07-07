@@ -68,6 +68,7 @@ function CollectionsContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
+        credentials: 'include',
       });
       if (res.ok) {
         setFormData({ name: '', description: '' });
@@ -90,6 +91,7 @@ function CollectionsContent() {
           name: formData.name,
           description: formData.description,
         }),
+        credentials: 'include',
       });
       if (res.ok) {
         setEditingCollection(null);
@@ -104,7 +106,7 @@ function CollectionsContent() {
   const handleDeleteCollection = async (id: string) => {
     if (!confirm('Delete this collection? Recipes will not be deleted.')) return;
     try {
-      const res = await fetch(`/api/collections?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/collections?id=${id}`, { method: 'DELETE', credentials: 'include' });
       if (res.ok) {
         refreshCollections();
       }
@@ -120,6 +122,7 @@ function CollectionsContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recipeId: selectedRecipe.id, collectionId }),
+        credentials: 'include',
       });
       if (res.ok) {
         setShowAddToCollectionModal(false);
@@ -135,6 +138,7 @@ function CollectionsContent() {
     try {
       const res = await fetch(`/api/collections/remove?savedRecipeId=${savedRecipeId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       if (res.ok) {
         refreshCollections();

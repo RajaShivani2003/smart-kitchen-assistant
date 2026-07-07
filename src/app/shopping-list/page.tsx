@@ -81,6 +81,7 @@ function ShoppingListContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newItem),
+        credentials: 'include',
       });
       setNewItem({ item: '', quantity: '', unit: 'pcs', category: 'Other' });
       setShowAddModal(false);
@@ -96,6 +97,7 @@ function ShoppingListContent() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPurchased: !current }),
+        credentials: 'include',
       });
       refreshShopping();
     } catch (error) {
@@ -105,7 +107,7 @@ function ShoppingListContent() {
 
   const handleDelete = async (id: string) => {
     try {
-      await fetch(`/api/shopping-list/${id}`, { method: 'DELETE' });
+      await fetch(`/api/shopping-list/${id}`, { method: 'DELETE', credentials: 'include' });
       refreshShopping();
     } catch (error) {
       console.error('Failed to delete:', error);
@@ -118,6 +120,7 @@ function ShoppingListContent() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: editingItem }),
+        credentials: 'include',
       });
       setEditingId(null);
       refreshShopping();
@@ -135,6 +138,7 @@ function ShoppingListContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ weekStart: weekStart.toISOString() }),
+        credentials: 'include',
       });
       refreshShopping();
     } catch (error) {

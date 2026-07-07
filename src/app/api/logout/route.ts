@@ -20,7 +20,13 @@ export async function POST(req: Request) {
     }
   }
 
-  const response = Response.json({ message: 'Logged out successfully' });
-  response.headers.set('set-cookie', 'session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0; Secure');
+  const response = NextResponse.json({ message: 'Logged out successfully' });
+  response.cookies.set('session', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    maxAge: 0,
+    path: '/',
+  });
   return response;
 }

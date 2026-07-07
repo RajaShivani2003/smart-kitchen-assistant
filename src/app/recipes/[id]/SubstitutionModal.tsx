@@ -43,6 +43,7 @@ export default function SubstitutionModal({ ingredient, onClose, recipeTitle }: 
           unit: ingredient.unit || '',
           recipeContext: recipeTitle,
         }),
+        credentials: 'include',
       });
       const data = await res.json();
       if (data.substitutes) {

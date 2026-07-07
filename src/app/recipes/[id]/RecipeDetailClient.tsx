@@ -25,6 +25,7 @@ export default function RecipeDetailClient({ recipeId, isSaved: initialSaved }: 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recipeId }),
+        credentials: 'include',
       });
       if (res.ok) {
         setSaved(!saved);
@@ -59,6 +60,7 @@ export default function RecipeDetailClient({ recipeId, isSaved: initialSaved }: 
           mealType,
           recipeId,
         }),
+        credentials: 'include',
       });
       const data = await res.json();
       if (res.ok) {

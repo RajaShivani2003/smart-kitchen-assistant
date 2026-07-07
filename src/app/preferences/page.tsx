@@ -85,6 +85,7 @@ function PreferencesContent() {
           dietaryPreferences: dietaryPreferences.join(','),
           healthGoals: healthGoals || null,
         }),
+        credentials: 'include',
       });
 
       if (res.ok) {

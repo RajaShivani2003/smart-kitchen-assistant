@@ -53,6 +53,7 @@ function MatchRecipesContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: ingredient }),
+        credentials: 'include',
       });
       setAddedItems(prev => new Set(prev).add(ingredient));
     } catch (error) {

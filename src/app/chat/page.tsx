@@ -173,6 +173,7 @@ function ChatContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: [...messages, userMessage] }),
+        credentials: 'include',
       });
 
       const data = await res.json();
@@ -213,6 +214,7 @@ function ChatContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: [...messages, userMessage] }),
+        credentials: 'include',
       })
         .then(res => res.json())
         .then(data => {
@@ -242,7 +244,7 @@ function ChatContent() {
 
   const clearHistory = async () => {
     try {
-      await fetch('/api/chat/history', { method: 'DELETE' });
+      await fetch('/api/chat/history', { method: 'DELETE', credentials: 'include' });
       refreshChat();
       setMessages([]);
       setHasHistory(false);

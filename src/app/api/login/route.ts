@@ -45,16 +45,13 @@ export async function POST(req: Request) {
     });
 
     const response = NextResponse.json({ success: true });
-    const isProd = process.env.NODE_ENV === 'production';
-    const cookieParts = [
-      `session=${token}`,
-      'Path=/',
-      'HttpOnly',
-      'SameSite=Lax',
-      `Max-Age=${7 * 24 * 60 * 60}`,
-    ];
-    if (isProd) cookieParts.push('Secure');
-    response.headers.set('set-cookie', cookieParts.join('; '));
+    response.cookies.set('session', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
+    });
     return response;
   } catch (error) {
     console.error('Login error:', error);

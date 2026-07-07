@@ -82,7 +82,7 @@ function PantryContent() {
 
   const fetchLowStockItems = async () => {
     try {
-      const res = await fetch('/api/pantry/low-stock');
+      const res = await fetch('/api/pantry/low-stock', { credentials: 'include' });
       const data = await res.json();
       setLowStockItems(data.lowStockItems || []);
     } catch (error) {
@@ -100,6 +100,7 @@ function PantryContent() {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, id: editingId, quantity: parseFloat(formData.quantity) }),
+        credentials: 'include',
       });
       if (res.ok) {
         setShowModal(false);
@@ -116,7 +117,7 @@ function PantryContent() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to remove this ingredient?')) return;
     try {
-      const res = await fetch(`/api/pantry/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/pantry/${id}`, { method: 'DELETE', credentials: 'include' });
       if (res.ok) {
         refreshPantry();
         fetchLowStockItems();
@@ -161,6 +162,7 @@ function PantryContent() {
           unit: ingredient.unit,
           category: ingredient.category,
         }),
+        credentials: 'include',
       });
 
       if (res.ok) {
@@ -324,6 +326,7 @@ function PantryContent() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: base64 }),
+          credentials: 'include',
         });
         const data = await res.json();
         if (!res.ok) {

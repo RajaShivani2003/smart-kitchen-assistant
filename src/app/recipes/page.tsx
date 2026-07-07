@@ -175,6 +175,7 @@ function RecipesContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: ingredient }),
+        credentials: 'include',
       });
       setAddedToShopping(prev => new Set(prev).add(ingredient));
     } catch (error) {
@@ -192,7 +193,7 @@ function RecipesContent() {
     }
     setLoading(true);
     try {
-      const res = await fetch(`/api/recipes/search?q=${encodeURIComponent(query)}`);
+      const res = await fetch(`/api/recipes/search?q=${encodeURIComponent(query)}`, { credentials: 'include' });
       const data = await res.json();
       setResults(data);
       if (!searchHistory.includes(query)) {
@@ -219,7 +220,7 @@ function RecipesContent() {
       const params = new URLSearchParams();
       if (mealType && mealType !== 'All') params.set('mealType', mealType);
       if (cuisine && cuisine !== 'All') params.set('cuisine', cuisine);
-      const res = await fetch(`/api/recipes?${params.toString()}`);
+      const res = await fetch(`/api/recipes?${params.toString()}`, { credentials: 'include' });
       const data = await res.json();
       setAllRecipes(data);
       setDisplayedRecipes(data.slice(0, 12));
@@ -238,6 +239,7 @@ function RecipesContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recipeId: selectedRecipe!.id, collectionId: selectedCollectionId || undefined }),
+        credentials: 'include',
       });
       if (res.ok) {
         setShowSaveModal(false);
@@ -258,6 +260,7 @@ function RecipesContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date: selectedMealDate, mealType: selectedMealType, recipeId: showMealPlanModal.id }),
+        credentials: 'include',
       });
       setShowMealPlanModal(null);
     } catch (error) {
@@ -269,7 +272,7 @@ function RecipesContent() {
 
   const fetchCollections = async () => {
     try {
-      const res = await fetch('/api/collections');
+      const res = await fetch('/api/collections', { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setCollections(data);
@@ -289,6 +292,7 @@ function RecipesContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, ingredients: filteredIngredients, steps: filteredSteps }),
+        credentials: 'include',
       });
       setCreateSuccess(true);
       setTimeout(() => {

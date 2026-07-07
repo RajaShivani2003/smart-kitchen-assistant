@@ -84,7 +84,7 @@ function MealPlanContent() {
   const fetchMealPlans = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/meal-plans?weekStart=${currentWeekStart}`);
+      const res = await fetch(`/api/meal-plans?weekStart=${currentWeekStart}`, { credentials: 'include' });
       const data = await res.json();
       setMealPlans(data);
     } catch (error) {
@@ -117,6 +117,7 @@ function MealPlanContent() {
           mealType: selectedMealType,
           recipeId,
         }),
+        credentials: 'include',
       });
 
       await fetchMealPlans();
@@ -129,7 +130,7 @@ function MealPlanContent() {
 
   const handleDeleteMeal = async (mealPlanId: string) => {
     try {
-      await fetch(`/api/meal-plans/${mealPlanId}`, { method: 'DELETE' });
+      await fetch(`/api/meal-plans/${mealPlanId}`, { method: 'DELETE', credentials: 'include' });
       await fetchMealPlans();
     } catch (error) {
       console.error('Failed to delete meal plan:', error);
