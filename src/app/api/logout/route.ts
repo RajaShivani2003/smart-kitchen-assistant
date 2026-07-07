@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
