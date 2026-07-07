@@ -22,7 +22,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/auth/check', { credentials: 'include' });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch('/api/auth/check', { credentials: 'include', signal: controller.signal });
+      clearTimeout(timeoutId);
       const data = await res.json();
       setUser(data.user || null);
     } catch {

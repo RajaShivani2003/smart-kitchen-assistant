@@ -29,8 +29,11 @@ export function useCachedFetch<T = any>(url: string, options?: { ttl?: number; e
 
     setLoading(true);
     setError(null);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch(url, { credentials: 'include' });
+      const res = await fetch(url, { credentials: 'include', signal: controller.signal });
+      clearTimeout(timeoutId);
       if (!res.ok) {
         setError(new Error(`HTTP ${res.status}`));
         setLoading(false);
@@ -40,6 +43,7 @@ export function useCachedFetch<T = any>(url: string, options?: { ttl?: number; e
       cache.set(url, { data: json, timestamp: Date.now() });
       setData(json);
     } catch (err) {
+      clearTimeout(timeoutId);
       setError(err as Error);
     } finally {
       setLoading(false);
