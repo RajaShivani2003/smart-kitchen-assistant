@@ -4,7 +4,19 @@ import { getServerAuth } from '@/lib/server-auth';
 export async function GET() {
   const auth = await getServerAuth();
   if (!auth) {
-    return NextResponse.json({ user: null });
+    return new NextResponse(JSON.stringify({ user: null }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': 'true',
+      },
+    });
   }
-  return NextResponse.json({ user: { userId: auth.userId, email: auth.email, name: auth.name } });
+  return new NextResponse(JSON.stringify({ user: { userId: auth.userId, email: auth.email, name: auth.name } }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Credentials': 'true',
+    },
+  });
 }

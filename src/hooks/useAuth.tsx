@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/auth/check');
+      const res = await fetch('/api/auth/check', { credentials: 'include' });
       const data = await res.json();
       setUser(data.user || null);
     } catch {
