@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const auth = await getServerAuth();
+    const auth = await getApiAuth(req);
     if (!auth) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
@@ -29,9 +29,9 @@ export async function GET() {
   }
 }
 
-export async function DELETE() {
+export async function DELETE(req: Request) {
   try {
-    const auth = await getServerAuth();
+    const auth = await getApiAuth(req);
     if (!auth) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }

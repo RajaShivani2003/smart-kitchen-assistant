@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const auth = await getServerAuth();
+    const auth = await getApiAuth(req);
     if (!auth) {
       return new NextResponse(JSON.stringify({ user: null }), {
         status: 200,

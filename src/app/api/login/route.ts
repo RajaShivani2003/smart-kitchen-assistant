@@ -52,7 +52,6 @@ export async function POST(req: Request) {
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
     });
-
     return response;
   } catch (error) {
     console.error('Login error:', error);

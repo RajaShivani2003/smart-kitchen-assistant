@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
 const OPENAI_KEY = process.env.OPENAI_API_KEY || '';
@@ -11,7 +11,7 @@ interface ChatMessage {
 
 export async function POST(request: Request) {
   try {
-    const auth = await getServerAuth();
+    const auth = await getApiAuth(request);
     if (!auth) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }

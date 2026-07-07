@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(req: Request) {
@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const cuisine = searchParams.get('cuisine');
   const limit = parseInt(searchParams.get('limit') || '12');
 
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
 
   // Build base filters (case-insensitive done in JS since Prisma v6 removed mode: insensitive)
   let allRecipes = await prisma.recipe.findMany({

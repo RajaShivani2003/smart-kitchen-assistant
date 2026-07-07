@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
-  const auth = await getServerAuth();
+export async function GET(req: Request) {
+  const auth = await getApiAuth(req);
 
   if (!auth) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });

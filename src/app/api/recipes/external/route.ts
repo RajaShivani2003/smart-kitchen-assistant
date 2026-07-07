@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
 const categories = ['Chicken', 'Beef', 'Pasta', 'Vegetarian', 'Seafood', 'Starter', 'Side Dish', 'Goat', 'Italian', 'French', 'Thai'];
 
 export async function GET(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
   if (!auth) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }

@@ -1,4 +1,4 @@
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 import { hashPassword } from '@/lib/auth-utils';
 import { z } from 'zod';
@@ -65,6 +65,6 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
   return Response.json({ session: auth ? { user: { id: auth.userId, email: auth.email, name: auth.name } } : null });
 }

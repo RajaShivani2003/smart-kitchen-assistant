@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 import { dishProfiles } from '../dish-profiles';
 
@@ -202,7 +202,7 @@ function matchesIngredient(recipeIng: string, pantryIng: string): boolean {
 }
 
 export async function GET(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
   if (!auth) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }

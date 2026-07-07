@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 
 export async function GET(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
   if (!auth) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
@@ -56,7 +56,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
   if (!auth) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }

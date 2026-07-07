@@ -1,4 +1,4 @@
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
@@ -12,7 +12,7 @@ const schema = z.object({
 });
 
 export async function PUT(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
 
   if (!auth) {
     return Response.json({ error: 'Not authenticated' }, { status: 401 });
@@ -52,7 +52,7 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
 
   if (!auth) {
     return Response.json({ error: 'Not authenticated' }, { status: 401 });

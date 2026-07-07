@@ -1,10 +1,10 @@
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
 const LOW_STOCK_THRESHOLD = 2;
 
-export async function GET() {
-  const auth = await getServerAuth();
+export async function GET(req: Request) {
+  const auth = await getApiAuth(req);
 
   if (!auth) {
     return Response.json({ error: 'Not authenticated' }, { status: 401 });

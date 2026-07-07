@@ -1,8 +1,8 @@
-import { getServerAuth } from '@/lib/server-auth';
+import { getApiAuth } from '@/lib/server-auth';
 import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
-  const auth = await getServerAuth();
+  const auth = await getApiAuth(req);
 
   if (!auth) {
     return Response.json({ error: 'Not authenticated' }, { status: 401 });
