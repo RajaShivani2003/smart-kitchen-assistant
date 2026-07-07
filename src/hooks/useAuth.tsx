@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    return { user: null, loading: false, refreshAuth: async () => {} };
+    return { user: null, loading: true, refreshAuth: async () => {} };
   }
   return context;
 }
