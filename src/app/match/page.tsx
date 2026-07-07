@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/context/AuthContext';
 import { useCachedFetch } from '@/hooks/useCachedFetch';
 import { useRouter } from 'next/navigation';
 import { ChefHat, Clock, Star, AlertCircle, Heart, CheckCircle2, XCircle, ExternalLink, User, BookOpen, Calendar, Send, ShoppingCart } from 'lucide-react';
