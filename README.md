@@ -191,3 +191,7 @@ src/app/api/
 - Environment variables: DATABASE_URL, OPENAI_API_KEY, GEMINI_API_KEY, NEXTAUTH_SECRET
 - Database: MySQL via Aiven Cloud
 - Auto-seeds 50 recipes with correct ingredients and instructions on first deploy
+
+## Live Demo
+
+🔗 [smart-kitchen-assistant-five.vercel.app](https://smart-kitchen-assistant-five.vercel.app/login)
