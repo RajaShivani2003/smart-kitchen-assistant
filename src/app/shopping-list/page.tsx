@@ -64,6 +64,20 @@ function ShoppingListContent() {
   }, [pantryData]);
 
   useEffect(() => {
+    if (shoppingData) setItems(shoppingData);
+  }, [shoppingData]);
+
+  useEffect(() => {
+    if (pantryData) {
+      if (Array.isArray(pantryData)) {
+        setPantryItems(pantryData);
+      } else {
+        setPantryItems(pantryData.ingredients || []);
+      }
+    }
+  }, [pantryData]);
+
+  useEffect(() => {
     if (!user && !authLoading) {
       router.push('/login');
       return;

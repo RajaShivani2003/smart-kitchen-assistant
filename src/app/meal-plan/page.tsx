@@ -44,6 +44,7 @@ function MealPlanContent() {
   const [availableRecipes, setAvailableRecipes] = useState<MealPlanRecipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<MealPlanRecipe | null>(null);
   const { data: recipesData, loading: recipesLoading } = useCachedFetch<MealPlanRecipe[]>('/api/recipes');
+  const [mealPlansFetched, setMealPlansFetched] = useState(false);
 
   useEffect(() => {
     if (recipesData) {
@@ -52,15 +53,18 @@ function MealPlanContent() {
   }, [recipesData]);
 
   useEffect(() => {
+    if (user && !mealPlansFetched) {
+      fetchMealPlans();
+      setMealPlansFetched(true);
+    }
+  }, [user, mealPlansFetched, currentWeekStart]);
+
+  useEffect(() => {
     if (!user && !authLoading) {
       router.push('/login');
       return;
     }
-
-    if (user) {
-      fetchMealPlans();
-    }
-  }, [authLoading, user, currentWeekStart]);
+  }, [authLoading, user]);
 
   function getWeekStart(date: Date): string {
     const d = new Date(date);

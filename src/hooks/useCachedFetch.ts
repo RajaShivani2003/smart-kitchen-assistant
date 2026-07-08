@@ -8,10 +8,19 @@ interface CacheEntry<T> {
 const cache = new Map<string, CacheEntry<any>>();
 const CACHE_TTL = 5 * 60 * 1000;
 
+function getCachedData<T>(url: string, ttl: number): T | null {
+  const cached = cache.get(url);
+  if (cached && Date.now() - cached.timestamp < ttl) {
+    return cached.data as T;
+  }
+  return null;
+}
+
 export function useCachedFetch<T = any>(url: string, options?: { ttl?: number; enabled?: boolean }) {
   const { ttl = CACHE_TTL, enabled = true } = options || {};
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
+  const initialData = enabled ? getCachedData<T>(url, ttl) : null;
+  const [data, setData] = useState<T | null>(initialData);
+  const [loading, setLoading] = useState(initialData === null && enabled);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -42,10 +51,10 @@ export function useCachedFetch<T = any>(url: string, options?: { ttl?: number; e
       const json = await res.json();
       cache.set(url, { data: json, timestamp: Date.now() });
       setData(json);
+      setLoading(false);
     } catch (err) {
       clearTimeout(timeoutId);
       setError(err as Error);
-    } finally {
       setLoading(false);
     }
   }, [url, ttl, enabled]);
